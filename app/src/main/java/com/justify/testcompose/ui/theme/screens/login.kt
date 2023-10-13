@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,26 +18,33 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.justify.testcompose.R
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginScreen(context: Context) {
+fun LoginScreen(context: Context, viewModel: LoginViewModel) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Login(context, Modifier.align(Alignment.Center))
+        Login(context, viewModel, Modifier.align(Alignment.Center))
     }
 }
 
 @Composable
-fun Login(context:Context, modifier: Modifier) {
+fun Login(context:Context, viewModel: LoginViewModel, modifier: Modifier) {
 
-    val loading = false
-    val email = ""
-    val password = ""
-    val enable = false
+    val loading : Boolean = viewModel.isLoading.value == true
+
+    // val email = viewModel.email.value ?: ""
+    val email: String by viewModel.email.observeAsState(initial = "")
+
+//    val password = viewModel.password.value?: ""
+    val password: String by viewModel.password.observeAsState(initial = "")
+
+    val enable = viewModel.loginEnable.value == true
+    val coroutineScope = rememberCoroutineScope()
 
     if (loading) {
         Box(Modifier.fillMaxSize()) {
@@ -50,13 +60,18 @@ fun Login(context:Context, modifier: Modifier) {
             Title()
             Spacer(modifier = Modifier.padding(16.dp))
             EmailField(email) {
+                viewModel.onLoginChanged(it, password)
             }
             Spacer(modifier = Modifier.padding(8.dp))
             PasswordField(password) {
+                viewModel.onLoginChanged(email, it)
             }
             Spacer(modifier = Modifier.padding(16.dp))
             LoginButton(enable) {
-                Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show()
+                coroutineScope.launch {
+                    viewModel.onLoginChanged(email, password)
+                }
+                // Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -87,7 +102,6 @@ fun Title() {
                 textColor = Color(0xFF636262),
                 backgroundColor = Color(0xFFDEDDDD),
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
             )
         )
     }
@@ -105,7 +119,6 @@ fun Title() {
                 textColor = Color(0xFF636262),
                 backgroundColor = Color(0xFFDEDDDD),
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
             )
         )
     }

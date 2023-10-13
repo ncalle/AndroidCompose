@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import com.justify.testcompose.ui.theme.TestComposeTheme
 import com.justify.testcompose.ui.theme.screens.LoginScreen
+import com.justify.testcompose.ui.theme.screens.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
 //                    var state by rememberSaveable { mutableStateOf(false) }
 
-                    LoginScreen(this)
+                    LoginScreen(this, LoginViewModel())
                 }
             }
         }
