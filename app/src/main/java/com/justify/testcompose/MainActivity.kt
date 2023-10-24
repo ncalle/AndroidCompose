@@ -21,8 +21,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
-//                    var state by rememberSaveable { mutableStateOf(false) }
-
                     LoginScreen(this, LoginViewModel())
                 }
             }

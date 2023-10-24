@@ -36,11 +36,7 @@ fun LoginScreen(context: Context, viewModel: LoginViewModel) {
 fun Login(context:Context, viewModel: LoginViewModel, modifier: Modifier) {
 
     val loading : Boolean = viewModel.isLoading.value == true
-
-    // val email = viewModel.email.value ?: ""
     val email: String by viewModel.email.observeAsState(initial = "")
-
-//    val password = viewModel.password.value?: ""
     val password: String by viewModel.password.observeAsState(initial = "")
 
     val enable = viewModel.loginEnable.value == true
@@ -69,9 +65,8 @@ fun Login(context:Context, viewModel: LoginViewModel, modifier: Modifier) {
             Spacer(modifier = Modifier.padding(16.dp))
             LoginButton(enable) {
                 coroutineScope.launch {
-                    viewModel.onLoginChanged(email, password)
+                    viewModel.onLogin(context)
                 }
-                // Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show()
             }
         }
     }

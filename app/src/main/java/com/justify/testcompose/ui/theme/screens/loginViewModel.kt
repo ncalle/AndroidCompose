@@ -1,5 +1,6 @@
 package com.justify.testcompose.ui.theme.screens
 
+import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -29,6 +30,14 @@ class LoginViewModel : ViewModel() {
         Log.i("email", email)
         Log.i(" _loginEnable.value",  _loginEnable.value.toString())
     }
+
+    fun onLogin(context: Context) {
+        Toast.makeText(
+            context, "Login success " + _loginEnable.value.toString(),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
 
     private fun isValidPassword(password: String): Boolean = password.length > 8
 
